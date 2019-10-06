@@ -1,92 +1,11 @@
 const vscode = require('vscode');
 const hemingway = require('./hemingway')
+const decorations = require('./decorations')
 
-const adverbDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#c4e3f3',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#c4e3f3',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const qualifierbDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#c4e3f3',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#c4e3f3',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const complexWordDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#e3b7e8',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#e3b7e8',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const passiveDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#c4ed9d',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#c4ed9d',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const hardSentenceDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#f7ecb5',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#f7ecb5',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const veryHardSentenceDecorationType = vscode.window.createTextEditorDecorationType({
-    light: {
-        backgroundColor: '#e4b9b9',
-        borderRadius: '3px',
-        color: 'black',   
-    },
-    dark: {
-        backgroundColor: '#e4b9b9',
-        borderRadius: '3px',
-        color: 'black',
-     
-    }
-});
-const rgxNumbers = /\d+/g;
-
-function noop (any) {}
-
-function blockToDecoration(activeEditor, block, hoverFunc = noop) {
+function blockToDecoration(activeEditor, block, hoverMessage = undefined) {
     const startPos = activeEditor.document.positionAt(block.start);
     const endPos = activeEditor.document.positionAt(block.end);
-    return { range: new vscode.Range(startPos, endPos), hoverMessage: hoverFunc(block) };   
+    return { range: new vscode.Range(startPos, endPos), hoverMessage };   
 }
 function updateTextEditor({ document, contentChanges }) {
     let activeEditor = vscode.window.activeTextEditor;
@@ -119,30 +38,30 @@ function updateTextEditor({ document, contentChanges }) {
     //     decorations.push(decoration)
     // }
 
-    activeEditor.setDecorations(adverbDecorationType, [])
-    activeEditor.setDecorations(adverbDecorationType, 
+    activeEditor.setDecorations(decorations.adverb, [])
+    activeEditor.setDecorations(decorations.adverb, 
         adverbs.map(b => blockToDecoration(activeEditor, b)))
 
-    activeEditor.setDecorations(qualifierbDecorationType, [])
-    activeEditor.setDecorations(qualifierbDecorationType, 
+    activeEditor.setDecorations(decorations.qualifier, [])
+    activeEditor.setDecorations(decorations.qualifier, 
             qualifiers.map(b => blockToDecoration(activeEditor, b)))
 
-    activeEditor.setDecorations(passiveDecorationType, [])
-    activeEditor.setDecorations(passiveDecorationType, 
+    activeEditor.setDecorations(decorations.passive, [])
+    activeEditor.setDecorations(decorations.passive, 
             passive.map(b => blockToDecoration(activeEditor, b)))
         
-    activeEditor.setDecorations(complexWordDecorationType, [])
-    activeEditor.setDecorations(complexWordDecorationType, 
-            complexWords.map(b => blockToDecoration(activeEditor, b, () => `${b.alt.join(', ')}` )))
+    activeEditor.setDecorations(decorations.complexWord, [])
+    activeEditor.setDecorations(decorations.complexWord, 
+            complexWords.map(b => blockToDecoration(activeEditor, b, `${b.alt.join(', ')}` )))
 
-    activeEditor.setDecorations(hardSentenceDecorationType, [])
-    activeEditor.setDecorations(hardSentenceDecorationType, 
+    activeEditor.setDecorations(decorations.hardSentence, [])
+    activeEditor.setDecorations(decorations.hardSentence, 
             sentences
             .filter(b => b.wordCount >= 14 && b.level >= 10 && b.level < 14)
             .map(b => blockToDecoration(activeEditor, b)))
 
-    activeEditor.setDecorations(veryHardSentenceDecorationType, [])
-    activeEditor.setDecorations(veryHardSentenceDecorationType, 
+    activeEditor.setDecorations(decorations.veryHardSentence, [])
+    activeEditor.setDecorations(decorations.veryHardSentence, 
             sentences
             .filter(b => b.wordCount >= 14 && b.level >= 14)
             .map(b => blockToDecoration(activeEditor, b)))
