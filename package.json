@@ -9,6 +9,24 @@
 	"categories": [
 		"Other"
 	],
+	"viewsContainers": {
+		"activitybar": [
+			{
+				"id": "hemingway-explorer",
+				"title": "Hemingway",
+				"icon": "assets/icon.svg"
+			}
+		]
+	},
+	"views": {
+		"hemingway-explorer": [
+			{
+				"id": "hemingwayExplorer",
+				"name": "Hemingway",
+				"when": "explorer"
+			}
+		]
+	},
 	"activationEvents": [
 		"onCommand:extension.helloWorld",
 		"onLanguage:markdown"

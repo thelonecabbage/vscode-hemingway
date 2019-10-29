@@ -2,7 +2,7 @@ const dictionary = require('./hemingway_dictionary')
 
 const rgx = {
     paragraphs: /[^\r\n]+((\r|\n|\r\n)[^\r\n]+)*/gi,
-    sentences: /[^\.\!\?]*[\.\!\?]/gi,
+    sentences: /[^\.\!\?\n\r]*[\.\!\?\n\r]/gi,
     words: /[\w-]+/gi,
     lyWords: /[\w-]+ly/gi,
     qualifiers: new RegExp(dictionary.qualifyingWords.join('|'), 'gim'),

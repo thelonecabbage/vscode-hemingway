@@ -24,30 +24,36 @@ function activate(context) {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello Worlds!$');
 	});
+	const diagnostics = vscode.languages.createDiagnosticCollection('Hemingway');
+    
 	context.subscriptions.push(disposable);
 	
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(() => { 
 			console.log('onDidChangeConfiguration');
+			// updateTextEditor({ document: null})
 			// Decorator.init(); 
 			// Decorator.decorate(undefined, true);
 		}),
 		vscode.workspace.onDidChangeTextDocument(({ document, contentChanges }) => {
 			
-			updateTextEditor({ document, contentChanges });
+			updateTextEditor({ document, contentChanges, diagnostics });
 
-			console.log('ASDFSADF onDidChangeTextDocument:')
-			// console.warn(document.getText()); 
-			// console.warn(contentChanges);
-
-			// Changes.onChanges
+			
 		}),
-		vscode.window.onDidChangeActiveTextEditor(() => {
+		// vscode.window.onDidOpenTextDocument((document) => {
+		// 	console.log('onDidOpenTextDocument');
+		// 	updateTextEditor({ document });
+
+		// 	// Decorator.decorate(undefined, true)
+		// }),
+		vscode.window.onDidChangeActiveTextEditor((document) => {
 			console.log('onDidChangeActiveTextEditor');
-			// Decorator.decorate(undefined, true)
+			updateTextEditor({ document: null, contentChanges:null, diagnostics });
+			
 		})
 	);
-
+	updateTextEditor({ document: null, contentChanges:null, diagnostics })
 
 }
 exports.activate = activate;
